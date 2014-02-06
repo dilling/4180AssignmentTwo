@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -18,9 +19,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// Define TextView and EditText Implementations in Interface
 		final TextView tv1 = (TextView) findViewById(R.id.textView5);
+		final EditText editText1 = (EditText) findViewById(R.id.editText1);
+		
+		// Add % Sign to End of SeekBar Value
 		tv1.append("%");
 		
+		// Add Error Message for Unentered EditText Scenario
+		editText1.setError("Enter List Price");
+		
+		// Define the Seekbar and its Properties
 		SeekBar sb = (SeekBar) findViewById(R.id.seekBar1);
 		sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			
@@ -39,7 +48,8 @@ public class MainActivity extends Activity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				// TODO Auto-generated method stub
+		
+				// Update display of progress bar with appended % symbol
 				tv1.setText(progress+"%");
 			}
 		});
