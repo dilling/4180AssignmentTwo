@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,22 +20,14 @@ public class MainActivity extends Activity {
 	TextView pay, saved, seekbarText;
 	SeekBar sb;
 	EditText editTextPrice;
-	double discount, price;
+	Double discount, price;
+	RadioGroup radioGroup;
 	final double[] discountLevel = { .10, .25, .50 };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		//Setup Exit Button
-		Button exitButton = (Button) findViewById(R.id.button1);
-		exitButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v){
-				finish();
-			}
-		});
 
 		// Define TextView and EditText Implementations in Interface
 		seekbarText = (TextView) findViewById(R.id.textViewSeekbar);
@@ -44,38 +35,47 @@ public class MainActivity extends Activity {
 		sb = (SeekBar) findViewById(R.id.seekBar1);
 		pay = (TextView) findViewById(R.id.textViewPay);
 		saved = (TextView) findViewById(R.id.textViewSaved);
+		radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
+
+		// Initializes price and discount
+		setPrice(0.0);
+		switch (radioGroup.getCheckedRadioButtonId()) {
+		case R.id.radio0:
+			setDiscount(discountLevel[0]);
+			break;
+		case R.id.radio1:
+			setDiscount(discountLevel[1]);
+			break;
+		case R.id.radio2:
+			setDiscount(discountLevel[2]);
+			break;
+		case R.id.radio3:
+			setDiscount(sb.getProgress() / 100.00);
+		}
 
 		// Add Error Message for Unentered EditText Scenario
 		editTextPrice.setError("Enter List Price");
-		pay.setText("$" + pay.getText());
-		saved.setText("$" + saved.getText());
-		
-		//Add Percent Symbol to SeekBar Text So it Doesn't Jarringly Appear
-		seekbarText.append("%");
-		update();
 
 		// Define the radio button group and its properties
-		((RadioGroup) findViewById(R.id.radioGroup1))
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						// checkedId is the RadioButton selected
-						switch (checkedId) {
-						case R.id.radio0:
-							setDiscount(discountLevel[0]);
-							break;
-						case R.id.radio1:
-							setDiscount(discountLevel[1]);
-							break;
-						case R.id.radio2:
-							setDiscount(discountLevel[2]);
-							break;
-						case R.id.radio3:
-							setDiscount(sb.getProgress()/100.00);
-							Log.d("David's logs", Double.toString(sb.getProgress()));
-							break;
-						}
-					}
-				});
+		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				// checkedId is the RadioButton selected
+				switch (checkedId) {
+				case R.id.radio0:
+					setDiscount(discountLevel[0]);
+					break;
+				case R.id.radio1:
+					setDiscount(discountLevel[1]);
+					break;
+				case R.id.radio2:
+					setDiscount(discountLevel[2]);
+					break;
+				case R.id.radio3:
+					setDiscount(sb.getProgress() / 100.00);
+					break;
+				}
+			}
+		});
 
 		// Define the seekbar and its Properties
 		sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -84,35 +84,53 @@ public class MainActivity extends Activity {
 					boolean fromUser) {
 				// Update display of progress bar with appended % symbol
 				seekbarText.setText(progress + "%");
-				
-				// Updates the discount with the current seekbar progress if custom is selected
-				if(((RadioButton) findViewById(R.id.radio3)).isChecked())
-					setDiscount(progress/100.00);
-					
-				
-				//Log.d("David's logs", Double.toString(progress));
+
+				// Updates the discount with the current seekbar progress if
+				// custom is selected
+				if (((RadioButton) findViewById(R.id.radio3)).isChecked())
+					setDiscount(progress / 100.00);
 			}
-			
+
 			// Implements required methods
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
-			public void onStartTrackingTouch(SeekBar seekBar){}
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
 		});
 
 		// Adds a listener for the text edit field
 		editTextPrice.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				// Sets the price from the value entered
-				setPrice(Double.parseDouble(s.toString()));
+				if (s == null)
+					setPrice(0.0);
+				else
+					setPrice(Double.parseDouble(s.toString()));
 			}
 
 			// Implements required methods
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			public void onTextChanged(CharSequence s, int start, int before, int count){}
-			
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
+
+		});
+
+		// Setup Exit Button
+		Button exitButton = (Button) findViewById(R.id.button1);
+		exitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
 		});
 	}
 
@@ -134,13 +152,11 @@ public class MainActivity extends Activity {
 	}
 
 	private void update() {
-		double discountPrice = (1 - discount) * price;
-		pay.setText(Double.toString(discountPrice));
-		saved.setText(Double.toString(price - discountPrice));
-		
-		// Prepend $ To Format Output Correctly to User
-		pay.setText("$" + pay.getText());
-		saved.setText("$" + saved.getText());
+		if(price!=null&&discount!=null){
+			double discountPrice = (1 - discount) * price;
+			pay.setText("$" + Double.toString(discountPrice));
+			saved.setText("S" + Double.toString(price - discountPrice));
+		}
 	}
 
 }// end of main activity
