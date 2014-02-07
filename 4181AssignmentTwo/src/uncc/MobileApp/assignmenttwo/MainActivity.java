@@ -6,6 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,6 +28,15 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//Setup Exit Button
+		Button exitButton = (Button) findViewById(R.id.button1);
+		exitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v){
+				finish();
+			}
+		});
 
 		// Define TextView and EditText Implementations in Interface
 		seekbarText = (TextView) findViewById(R.id.textViewSeekbar);
@@ -35,6 +47,12 @@ public class MainActivity extends Activity {
 
 		// Add Error Message for Unentered EditText Scenario
 		editTextPrice.setError("Enter List Price");
+		pay.setText("$" + pay.getText());
+		saved.setText("$" + saved.getText());
+		
+		//Add Percent Symbol to SeekBar Text So it Doesn't Jarringly Appear
+		seekbarText.append("%");
+		update();
 
 		// Define the radio button group and its properties
 		((RadioGroup) findViewById(R.id.radioGroup1))
@@ -83,7 +101,7 @@ public class MainActivity extends Activity {
 
 		// Adds a listener for the text edit field
 		editTextPrice.addTextChangedListener(new TextWatcher() {
-
+			
 			@Override
 			public void afterTextChanged(Editable s) {
 				// Sets the price from the value entered
@@ -94,6 +112,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 			public void onTextChanged(CharSequence s, int start, int before, int count){}
+			
 		});
 	}
 
@@ -118,6 +137,10 @@ public class MainActivity extends Activity {
 		double discountPrice = (1 - discount) * price;
 		pay.setText(Double.toString(discountPrice));
 		saved.setText(Double.toString(price - discountPrice));
+		
+		// Prepend $ To Format Output Correctly to User
+		pay.setText("$" + pay.getText());
+		saved.setText("$" + saved.getText());
 	}
 
 }// end of main activity

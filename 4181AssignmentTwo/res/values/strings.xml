@@ -12,8 +12,8 @@
     <string name="text_pay">You Pay</string>
     <string name="text_custom_seekbar">Custom</string>
     <string name="text_discount">Discount %</string>
-    <string name="initial_saved">$ 0.00</string>
-    <string name="initial_pay">$ 0.00</string>
+    <string name="initial_saved">0.00</string>
+    <string name="initial_pay">0.00</string>
     <string name="button_text_exit">Exit</string>
     <string name="hint_listed_price">Enter Listed Price</string>
     <string name="initial_custom_seek">25</string>
