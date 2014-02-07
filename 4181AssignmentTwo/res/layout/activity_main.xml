@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hint_listed_price"
-            android:inputType="number" >
+            android:inputType="number|numberDecimal" >
 
             <requestFocus />
         </EditText>
@@ -107,7 +107,7 @@
             android:progress="@string/initial_custom_seek" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textViewSeekbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/initial_custom_seek"
