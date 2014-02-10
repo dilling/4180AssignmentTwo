@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
 	TextView pay, saved, seekbarText;
 	SeekBar sb;
 	EditText editTextPrice;
-	Double discount, price;
+	double discount, price;
 	RadioGroup radioGroup;
 	final double[] discountLevel = { .10, .25, .50 };
 
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 		saved = (TextView) findViewById(R.id.textViewSaved);
 		radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
 
-		// Initializes price and discount
+		// Initializes price and discount, for if the initial button is changed
 		setPrice(0.0);
 		switch (radioGroup.getCheckedRadioButtonId()) {
 		case R.id.radio0:
@@ -52,9 +52,6 @@ public class MainActivity extends Activity {
 		case R.id.radio3:
 			setDiscount(sb.getProgress() / 100.00);
 		}
-
-		// Add Error Message for Unentered EditText Scenario
-		editTextPrice.setError("Enter List Price");
 
 		// Define the radio button group and its properties
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -106,7 +103,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// Sets the price from the value entered
-				if (s == null)
+				if (s.toString().equals(""))
 					setPrice(0.0);
 				else
 					setPrice(Double.parseDouble(s.toString()));
@@ -152,11 +149,9 @@ public class MainActivity extends Activity {
 	}
 
 	private void update() {
-		if(price!=null&&discount!=null){
-			double discountPrice = (1 - discount) * price;
-			pay.setText("$" + Double.toString(discountPrice));
-			saved.setText("S" + Double.toString(price - discountPrice));
-		}
+		double discountPrice = (1 - discount) * price;
+		pay.setText("$ " + Double.toString(discountPrice));
+		saved.setText("S " + Double.toString(price - discountPrice));
 	}
 
 }// end of main activity

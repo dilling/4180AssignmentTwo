@@ -104,13 +104,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:progress="@string/initial_custom_seek" />
+            android:progress="@integer/value_initial_custom_seek" />
 
         <TextView
             android:id="@+id/textViewSeekbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/initial_custom_seek"
+            android:text="@string/text_initial_custom_seek"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>

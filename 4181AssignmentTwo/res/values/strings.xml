@@ -17,5 +17,6 @@
     <string name="button_text_exit">Exit</string>
     <string name="hint_listed_price">Enter Listed Price</string>
     <string name="initial_custom_seek">25%</string>
+    <string name="text_initial_custom_seek">25%</string>
 
 </resources>
