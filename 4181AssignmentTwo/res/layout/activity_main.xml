@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:textAlignment="viewStart"
     tools:context=".MainActivity" >
 
     <LinearLayout
@@ -30,7 +31,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hint_listed_price"
-            android:inputType="number|numberDecimal" >
+            android:inputType="number"
+            android:textAlignment="viewEnd" >
 
             <requestFocus />
         </EditText>

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -29,7 +27,7 @@ public class MainActivity extends Activity {
 	final double[] discountLevel = { .10, .25, .50 };
 	final String LOG_TAG = "demo";
 	DecimalFormat df = new DecimalFormat("0.00");
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,24 +101,35 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		// Sets the initial error message for the editTextField
+		editTextPrice.setError("Enter List Price");
+
 		// Adds a listener for the text edit field
 		editTextPrice.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-		
-				
+
 				// Sets the price from the value entered
-				if (s.toString().equals(""))
-					setPrice(0.0);
-				else if ((s.toString().indexOf(".") >=0))
-				{
-					Toast.makeText(getApplicationContext(), "Caution: When entering change, please use no more than two decimal places.",
-							   Toast.LENGTH_LONG).show();
-				setPrice(Double.parseDouble(s.toString()));
+				editTextPrice.removeTextChangedListener(this);
+
+				String noDecimal = s.toString().replace(".", "");
+				double parsedPrice = Double.parseDouble(noDecimal) / 100;
+				String output = df.format(parsedPrice);
+
+				setPrice(parsedPrice);
+
+				if (parsedPrice == 0) {
+					editTextPrice.setText("");
+					editTextPrice.setError("Enter List Price");
+				} else {
+					editTextPrice.setText(output);
+					editTextPrice.setSelection(output.length());
+
 				}
-				else
-					setPrice(Double.parseDouble(s.toString()));
+				
+				editTextPrice.addTextChangedListener(this);
+
 			}
 
 			// Implements required methods
@@ -164,16 +173,13 @@ public class MainActivity extends Activity {
 
 	private void update() {
 		double discountPrice = (1 - discount) * price;
-		
-		//Use DecimalFormatter to Format Doubles Prior to Pushing to Display
+
+		// Use DecimalFormatter to Format Doubles Prior to Pushing to Display
 		String creditsPayed = df.format(discountPrice);
-		String creditsSaved = df.format(price-discountPrice);
-		
+		String creditsSaved = df.format(price - discountPrice);
+
 		pay.setText(" $" + creditsPayed);
 		saved.setText("$" + creditsSaved);
-		
-		//pay.setText(" $" + Double.toString(discountPrice));
-		//saved.setText("$" + Double.toString(price - discountPrice));
 	}
 
 }// end of main activity
